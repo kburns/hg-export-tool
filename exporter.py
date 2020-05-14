@@ -117,6 +117,7 @@ def fix_branches(hg_repo):
             else:
                 new_branch_name = branch + '-%d' % next(counter)
             # Amend the head to modify its branch name:
+            subprocess.call(['hg', 'revert', '--all'], cwd=hg_repo)
             subprocess.check_call(['hg', 'up', head['hash']], cwd=hg_repo)
             # Commit must be in draft phase to be able to amend it:
             subprocess.check_call(
