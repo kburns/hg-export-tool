@@ -304,7 +304,8 @@ def export_commit(ui,repo,revision,old_marks,max,count,authors,
   author = get_author(desc,user,authors)
 
   if plugins and plugins['commit_message_filters']:
-    commit_data = {'branch': branch, 'parents': parents, 'author': author, 'desc': desc}
+    hg_hash = revsymbol(repo,b"%d" % revision).hex()
+    commit_data = {'branch': branch, 'parents': parents, 'author': author, 'desc': desc, 'hg_hash': hg_hash}
     for filter in plugins['commit_message_filters']:
       filter(commit_data)
     branch = commit_data['branch']
@@ -436,8 +437,8 @@ def load_mapping(name, filename, mapping_is_raw):
   def parse_quoted_line(line):
     m=quoted_regexp.match(line)
     if m==None:
-      return 
-    
+      return
+
     return (process_unicode_escape_sequences(m.group(1)),
             process_unicode_escape_sequences(m.group(5)))
 
